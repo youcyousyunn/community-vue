@@ -37,7 +37,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>我的问题</el-dropdown-item>
-          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -108,12 +108,12 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import Logo from '@/layout/components/Logo'
 import Search from '@/components/HeaderSearch'
 import {qryTopicList} from '@/api/topic.js'
-import { setToken } from '@/utils/auth'
-import {qryUserInfo} from '@/api/user.js'
+import {setToken, getToken, removeToken} from '@/utils/auth'
+import {qryUserInfo, logout} from '@/api/user.js'
 
 export default {
   components: {
@@ -195,6 +195,16 @@ export default {
           clearInterval(loop)
         }
       }, 2000)
+    },
+    // 退出登录
+    logout () {
+      const sessionId = getToken()
+      removeToken() // 删除本地授权令牌Cookie
+      logout(sessionId).then(res => {
+        this.show_login = true
+        this.show_profile = false
+        this.$router.push({path: '/'}) // 返回首页
+      })
     }
   },
   created () {

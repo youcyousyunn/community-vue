@@ -11,7 +11,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     if (getToken()) {
-      // config.headers['CMM_JSESSIONID'] = getToken()
+      config.headers['Authorization'] = getToken()
     }
     return config
   },

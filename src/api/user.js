@@ -14,3 +14,10 @@ export function qryUserInfo () {
     method: 'get'
   })
 }
+
+export function logout (sessionId) {
+  return request({
+    url: '/user/logout/' + sessionId,
+    method: 'get'
+  })
+}
