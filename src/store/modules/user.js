@@ -4,7 +4,7 @@ const state = {
   token: getToken(),
   accountId: '',
   name: '',
-  avatarUrl: ''
+  avatar: ''
 }
 
 const mutations = {
@@ -17,8 +17,8 @@ const mutations = {
   SET_NAME: (state, name) => {
     state.name = name
   },
-  SET_AVATAR_URL: (state, avatarUrl) => {
-    state.avatarUrl = avatarUrl
+  SET_AVATAR: (state, avatar) => {
+    state.avatar = avatar
   }
 }
 
@@ -29,11 +29,11 @@ const actions = {
     console.log(userInfo)
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(res => {
-        const { token, accountId, name, avatarUrl } = res.data
+        const { token, accountId, name, avatar } = res.data
         setToken(token)
         commit('SET_ACCOUNT_ID', accountId)
         commit('SET_NAME', name)
-        commit('SET_AVATAR_URL', avatarUrl)
+        commit('SET_AVATAR', avatar)
         resolve()
       }).catch(error => {
         reject(error)
@@ -45,10 +45,10 @@ const actions = {
   getUserInfo ({ commit, state }) {
     return new Promise((resolve, reject) => {
       qryUserInfo().then(res => {
-        const { accountId, name, avatarUrl } = res.data
+        const { accountId, name, avatar } = res.data
         commit('SET_ACCOUNT_ID', accountId)
         commit('SET_NAME', name)
-        commit('SET_AVATAR_URL', avatarUrl)
+        commit('SET_AVATAR', avatar)
         resolve()
       }).catch(error => {
         reject(error)

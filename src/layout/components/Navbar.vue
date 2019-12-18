@@ -32,7 +32,7 @@
       </div>
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click" v-if="show_profile">
         <div class="avatar-wrapper">
-          <img :src="userInfo.avatarUrl" class="user-avatar">
+          <img :src="userInfo.avatar" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -156,7 +156,7 @@ export default {
       },
       userInfo: {
         accountId: '',
-        avatarUrl: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
+        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
       }
     }
   },

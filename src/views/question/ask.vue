@@ -102,13 +102,11 @@ export default {
     // 发布问题
     publish () {
       pubQuestion({title: this.title, description: this.description, tag: this.tag}).then(res => {
-        if (res.rspCode === '0000') {
-          this.$message({
-            message: '提问成功',
-            type: 'success'
-          })
-          this.$router.push({path: '/'})
-        }
+        this.$message({
+          message: '提问成功',
+          type: 'success'
+        })
+        this.$router.push({path: '/'})
       })
     },
     // 初始化列表

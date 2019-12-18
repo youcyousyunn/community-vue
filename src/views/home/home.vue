@@ -28,7 +28,7 @@
         <el-row class="content">
           <div class="aw-item" v-for="(item, index) in tableData" v-bind:key="index">
             <a class="aw-user-avator" rel="nofollow">
-              <img :src="item.avatarUrl" alt="">
+              <img :src="item.avatar" alt="">
             </a>
             <div class="aw-question-content">
               <h4>
@@ -89,10 +89,8 @@ export default {
     // 初始化表格数据
     initTableData () {
       queryQuestionPage({currentPage: this.page, pageSize: this.pageSize}).then(res => {
-        if (res.rspCode === '0000') {
-          this.tableData = res.data
-          this.total = res.total
-        }
+        this.tableData = res.data
+        this.total = res.total
       })
     },
     currentPage (page) {

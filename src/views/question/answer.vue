@@ -43,7 +43,7 @@
                 </el-col>
                 <el-col :span="8">
                   <a class="answer-user-avator" rel="nofollow">
-                    <img :src="avatarUrl" alt="">
+                    <img :src="avatar" alt="">
                   </a>
                   <div class="user-avator-content">
                     <h4>
@@ -99,7 +99,7 @@
                 </el-col>
                 <el-col :span="8">
                   <a class="answer-user-avator" rel="nofollow">
-                    <img :src="item.avatarUrl" alt="">
+                    <img :src="item.avatar" alt="">
                   </a>
                   <div class="user-avator-content">
                     <h4>
@@ -169,7 +169,7 @@ export default {
       tagList: [],
       viewCount: 0,
       description: '',
-      avatarUrl: '',
+      avatar: '',
       userName: '',
       creTm: 0,
       commentCount: 0,
@@ -216,9 +216,7 @@ export default {
         return
       }
       qryComment(this.id, 1).then(res => {
-        if (res.rspCode === '0000') {
-          this.commentList = res.data
-        }
+        this.commentList = res.data
       })
     },
     // 获取问题答案列表
@@ -227,10 +225,8 @@ export default {
         return
       }
       qryAnswerByQuestionId(this.id).then(res => {
-        if (res.rspCode === '0000') {
-          if (res.data !== null) {
-            this.answerList = res.data
-          }
+        if (res.data !== null) {
+          this.answerList = res.data
         }
       })
     },
@@ -245,46 +241,40 @@ export default {
         return
       }
       qryComment(id, 2).then(res => {
-        if (res.rspCode === '0000') {
-          this.answerCommentList = res.data
-        }
+        this.answerCommentList = res.data
       })
     },
     // 评论问题
     commentQuestion () {
       commentQuestionOrAnswer({parentId: this.id, commentator: 20416034, comment: this.questionComment, commentType: 1}).then(res => {
-        if (res.rspCode === '0000') {
-          this.getCommentList() // 刷新评论
-          this.commentCount += 1 // 评论数+1
-          this.questionComment = '' // 重置评论
-          this.$notify({
-            title: '成功',
-            message: '评论问题成功',
-            type: 'success'
-          })
-        }
+        this.getCommentList() // 刷新评论
+        this.commentCount += 1 // 评论数+1
+        this.questionComment = '' // 重置评论
+        this.$notify({
+          title: '成功',
+          message: '评论问题成功',
+          type: 'success'
+        })
       })
     },
     // 评论答案
     commentAnswer (index, answerId) {
       this.answerId = answerId
       commentQuestionOrAnswer({parentId: answerId, commentator: 20416034, comment: this.answerComment, commentType: 2}).then(res => {
-        if (res.rspCode === '0000') {
-          this.replyAnswer(this.answerId) // 刷新答案评论列表
-          this.answerList[index].commentCount += 1 // 评论数+1
-          this.answerComment = '' // 重置评论
-          this.$notify({
-            title: '成功',
-            message: '评论答案成功',
-            type: 'success'
-          })
+        this.replyAnswer(this.answerId) // 刷新答案评论列表
+        this.answerList[index].commentCount += 1 // 评论数+1
+        this.answerComment = '' // 重置评论
+        this.$notify({
+          title: '成功',
+          message: '评论答案成功',
+          type: 'success'
+        })
 
-          // 展开该答案下的评论
-          if (this.commentReplyIndex === answerId) {
-            this.commentReplyIndex = -1
-          } else {
-            this.commentReplyIndex = answerId
-          }
+        // 展开该答案下的评论
+        if (this.commentReplyIndex === answerId) {
+          this.commentReplyIndex = -1
+        } else {
+          this.commentReplyIndex = answerId
         }
       })
     },
@@ -299,34 +289,30 @@ export default {
         return
       }
       answerQuestion({questionId: this.id, answer: this.answer, answerer: 20416034}).then(res => {
-        if (res.rspCode === '0000') {
-          this.getAnswerList() // 刷新问题答案列表
-          this.answer = '' // 重置答案
-          if (this.id) {
-            this.$notify({
-              title: '成功',
-              message: '评论成功',
-              type: 'success'
-            })
-          }
-          // this.$router.push({path: '/'}) // 返回首页
+        this.getAnswerList() // 刷新问题答案列表
+        this.answer = '' // 重置答案
+        if (this.id) {
+          this.$notify({
+            title: '成功',
+            message: '评论成功',
+            type: 'success'
+          })
         }
+        // this.$router.push({path: '/'}) // 返回首页
       })
     },
     // 根据id获取单个提问
     getQuestion () {
       qryQuestion(this.id).then(res => {
-        if (res.rspCode === '0000') {
-          let data = res.data
-          this.title = data.title
-          this.viewCount = data.viewCount
-          this.tagList = data.tag.split(',')
-          this.description = data.description
-          this.avatarUrl = data.avatarUrl
-          this.userName = data.userName
-          this.creTm = data.creTm
-          this.commentCount = data.commentCount
-        }
+        let data = res.data
+        this.title = data.title
+        this.viewCount = data.viewCount
+        this.tagList = data.tag.split(',')
+        this.description = data.description
+        this.avatar = data.avatar
+        this.userName = data.userName
+        this.creTm = data.creTm
+        this.commentCount = data.commentCount
       })
     }
   },
