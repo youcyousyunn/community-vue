@@ -101,8 +101,9 @@ export default {
     },
     // 发布问题
     publish () {
-      pubQuestion({title: this.title, description: this.description, tag: this.tag}).then(res => {
-        this.$message({
+      pubQuestion({title: this.title, description: this.description, tag: this.tag, creator: 53936355}).then(res => {
+        this.$notify({
+          title: '成功',
           message: '提问成功',
           type: 'success'
         })
