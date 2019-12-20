@@ -62,29 +62,7 @@ export const constantRoutes = [
  * asyncRoutes
  * 需要根据用户角色动态加载的路由
  */
-export const asyncRoutes = [
-  // {
-  //   path: '/company',
-  //   component: Layout,
-  //   alwaysShow: true,
-  //   redirect: '/company/systemmanage',
-  //   meta: { title: '厂商自助', icon: 'companyself', code: 'company', roles: ['admin', 'editor'] },
-  //   children: [
-  //     {
-  //       path: 'systemmanage',
-  //       component: () => import('@/views/company/systemmanage'),
-  //       name: 'systemmanage',
-  //       meta: { title: '运维系统管理', icon: 'dashboard', module: 'company', code: 'system', roles: ['admin', 'editor'] }
-  //     },
-  //     {
-  //       path: 'personmanage',
-  //       component: () => import('@/views/company/personmanage'),
-  //       name: 'personmanage',
-  //       meta: { title: '运维人员管理', icon: 'dashboard', module: 'company', code: 'person', roles: ['admin', 'editor'] }
-  //     }
-  //   ]
-  // }
-]
+export const asyncRoutes = []
 
 const createRouter = () => new Router({
   mode: 'history', // 需要服务端支持
