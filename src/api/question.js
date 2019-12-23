@@ -1,10 +1,10 @@
 import request from '@/utils/request.js'
 
-export function queryQuestionPage (data) {
+export function queryQuestionPage (params) {
   return request({
     url: '/question/queryPage',
-    method: 'post',
-    data
+    method: 'get',
+    params
   })
 }
 
