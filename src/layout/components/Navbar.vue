@@ -27,7 +27,7 @@
 
       <div class="avatar-container right-menu-item hover-effect" v-if="show_login">
         <div class="avatar-wrapper" style="margin-top:unset">
-          <a class="login" @click="openLoginDialog">登录</a>
+          <a class="login" @click="openLoginDialog">立即登录</a>
         </div>
       </div>
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click" v-if="show_profile">
@@ -294,6 +294,7 @@ export default {
     .search {
       display: inline-block;
       padding: 8px 8px;
+      width: 265px;
       height: 100%;
       font-size: 18px;
       color: #5a5e66;

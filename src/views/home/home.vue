@@ -6,7 +6,7 @@
           <li v-for="(item, index) in tabList" v-bind:key="index"
               v-bind:class="{checked: index === activeIndex}"
               v-on:click="changeIndex(index)">
-            <a>{{item}}</a>
+            <a @click="toQuery(item)">{{item}}</a>
           </li>
         </ul>
       </el-row>
@@ -70,6 +70,7 @@
 </template>
 <script>
 import {queryQuestionPage} from '@/api/question.js'
+import transfer from '@/utils/transfer.js'
 import Avatar from '@/assets/avatar/avatar.png'
 export default {
   data () {
@@ -77,6 +78,8 @@ export default {
       Avatar: Avatar,
       tabList: ['全部', 'Vue', 'Node.js', 'html5', '最新动态', '活动'],
       activeIndex: 0,
+      tag: '',
+      name: '',
       tableData: [],
       pageSize: 10,
       page: 1,
@@ -84,13 +87,29 @@ export default {
       canvassImg: require('@/images/canvass.png')
     }
   },
+  mounted () {
+    debugger
+    var _this = this
+    transfer.$on('globalSearch', function (search) {
+      _this.name = search
+      _this.initTableData()
+    })
+  },
   methods: {
     changeIndex (index) {
       this.activeIndex = index
     },
+    toQuery (tag) {
+      if (tag !== '全部') {
+        this.tag = tag
+      } else {
+        this.tag = ''
+      }
+      this.initTableData()
+    },
     // 初始化表格数据
     initTableData () {
-      queryQuestionPage({currentPage: this.page, pageSize: this.pageSize}).then(res => {
+      queryQuestionPage({tag: this.tag, name: this.name, currentPage: this.page, pageSize: this.pageSize}).then(res => {
         this.tableData = res.data
         this.total = res.total
       })
