@@ -28,7 +28,7 @@
         <el-row class="content">
           <div class="aw-item" v-for="(item, index) in tableData" v-bind:key="index">
             <a class="aw-user-avator" rel="nofollow">
-              <img :src="item.avatar" alt="">
+              <img :src="item.avatar ? item.avatar : Avatar" alt="">
             </a>
             <div class="aw-question-content">
               <h4>
@@ -70,9 +70,11 @@
 </template>
 <script>
 import {queryQuestionPage} from '@/api/question.js'
+import Avatar from '@/assets/avatar/avatar.png'
 export default {
   data () {
     return {
+      Avatar: Avatar,
       tabList: ['全部', 'Vue', 'Node.js', 'html5', '最新动态', '活动'],
       activeIndex: 0,
       tableData: [],
