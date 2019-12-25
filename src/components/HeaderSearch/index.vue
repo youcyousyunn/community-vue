@@ -1,6 +1,6 @@
 <template>
     <div class="header-search">
-      <el-input v-model="search" @keyup.native="querySearch" placeholder="搜索问题或关键字">
+      <el-input v-model="search" @keyup.enter.native="querySearch" placeholder="搜索问题或关键字">
         <i class="el-icon-search" slot="suffix" @click="querySearch"></i>
       </el-input>
     </div>
@@ -16,7 +16,6 @@ export default {
   },
   methods: {
     querySearch () {
-      debugger
       transfer.$emit('globalSearch', this.search)
     }
   }

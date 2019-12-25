@@ -14,14 +14,14 @@
             <tinymce v-model="description"></tinymce>
           </el-row>
           <el-row>
-            <el-input v-model="tag" @click.native="tagShow = true" placeholder="标签，如：Vue（用逗号,分隔）"></el-input>
+            <el-input v-model="tag" @click.native="getTabTag()" placeholder="标签，如：Vue（用逗号,分隔）"></el-input>
           </el-row>
           <el-row v-if="tagShow">
             <ul class="tabs">
               <li v-for="(item, index) in tabList" v-bind:key="index"
                   v-bind:class="{tab_checked: index === activeTabIndex}"
                   v-on:click="changeTabIndex(index)">
-                <a @click="switchTab">{{item}}</a>
+                <a @click="switchTab(item.id)">{{item.name}}</a>
               </li>
             </ul>
           </el-row>
@@ -30,8 +30,8 @@
               <li v-for="(item, index) in tagList" v-bind:key="index"
                   v-bind:class="{tag_checked: index === activeTagIndex}"
                   v-on:click="changeTagIndex(index)">
-                <a @click="switchTag(item)">
-                  <svg-icon icon-class="discover" /> {{item}}
+                <a @click="switchTag(item.name)">
+                  <svg-icon icon-class="discover" /> {{item.name}}
                 </a>
               </li>
             </ul>
@@ -60,6 +60,7 @@
 </template>
 <script>
 import Tinymce from '@/components/Tinymce'
+import {qryTopicList, qryTagList} from '@/api/tag.js'
 import {pubQuestion} from '@/api/question.js'
 export default {
   components: {
@@ -67,24 +68,48 @@ export default {
   },
   data () {
     return {
+      type: '',
       title: '',
       description: '',
       tag: '',
-      tabList: ['开发语言', '平台框架', '服务器', '数据库和缓存', '开发工具', '系统设备', '其他'],
+      tabId: '', // 默认显示第一个tab标签
+      tabList: [],
       activeTabIndex: 0,
-      tagList: ['javascript', 'java', 'node.js', 'Vue', 'php', 'html5', 'python', 'c++', 'c', 'c#', 'swift', 'bash', 'shell', 'asp.net', 'erlang', 'perl', '其他'],
+      tagList: [],
       activeTagIndex: -1,
       tagShow: false,
       canvassImg: require('@/images/canvass.png')
     }
   },
+  created () {
+    this.type = this.$route.query.pid
+    this.getTopicList()
+  },
   methods: {
+    // 获取话题列表
+    getTopicList () {
+      const pid = 0 // 话题的父节点
+      qryTopicList(pid).then(res => {
+        const data = res.data
+        this.tabId = data[1].id
+        for (let i = 1; i < data.length; i++) {
+          this.tabList.push(data[i])
+        }
+      })
+    },
     changeTabIndex (index) {
       this.activeTabIndex = index
     },
     // 切换标签tab
-    switchTab () {
-
+    switchTab (pid) {
+      this.tabId = pid
+      this.getTagList()
+    },
+    // 获取tab对应标签
+    getTagList () {
+      qryTagList(this.tabId).then(res => {
+        this.tagList = res.data
+      })
     },
     changeTagIndex (index) {
       this.activeTagIndex = index
@@ -99,9 +124,14 @@ export default {
         this.tag = tag
       }
     },
+    // 获取tab标签
+    getTabTag () {
+      this.getTagList()
+      this.tagShow = true
+    },
     // 发布问题
     publish () {
-      pubQuestion({title: this.title, description: this.description, tag: this.tag, creator: 53936355}).then(res => {
+      pubQuestion({title: this.title, description: this.description, type: this.type, tag: this.tag, creator: 53936355}).then(res => {
         this.$notify({
           title: '成功',
           message: '提问成功',
@@ -113,9 +143,6 @@ export default {
     // 初始化列表
     initTableListData () {
     }
-  },
-  created () {
-    // this.initTableListData()
   }
 }
 </script>
@@ -201,6 +228,7 @@ ul, li {
 
 // 标签样式
 .tags {
+  height: 60px;
   padding: 10px 0;
 }
 .tags > li {

@@ -3,10 +3,10 @@
     <div class="filter-container">
       <el-row>
         <ul class="list">
-          <li v-for="(item, index) in tabList" v-bind:key="index"
+          <li v-for="(item, index) in tagList" v-bind:key="index"
               v-bind:class="{checked: index === activeIndex}"
               v-on:click="changeIndex(index)">
-            <a @click="toQuery(item)">{{item}}</a>
+            <a @click="toQuery(item.name)">{{item.name}}</a>
           </li>
         </ul>
       </el-row>
@@ -17,7 +17,7 @@
         <el-row class="subject">
           <el-col :span="12">
             <!-- <svg-icon icon-class="mulu"/> -->
-            <a>{{tabList[activeIndex]}}</a>
+            <a>{{tagList[activeIndex].name}}</a>
           </el-col>
           <el-col :span="12" class="askQuestion">
             <a @click="askQuestion">
@@ -71,15 +71,18 @@
 <script>
 import {queryQuestionPage} from '@/api/question.js'
 import transfer from '@/utils/transfer.js'
+import {qryMostStarTagList} from '@/api/tag.js'
 import Avatar from '@/assets/avatar/avatar.png'
 export default {
   data () {
     return {
       Avatar: Avatar,
-      tabList: ['全部', 'Vue', 'Node.js', 'html5', '最新动态', '活动'],
+      tagList: ['全部', 'Vue', 'Node.js', 'html5', '最新动态', '活动'],
       activeIndex: 0,
+      pid: '',
       tag: '',
       name: '',
+      params: {},
       tableData: [],
       pageSize: 10,
       page: 1,
@@ -87,15 +90,29 @@ export default {
       canvassImg: require('@/images/canvass.png')
     }
   },
+  created () {
+    this.getMostStarTagList()
+    this.initTableData()
+  },
   mounted () {
-    debugger
     var _this = this
     transfer.$on('globalSearch', function (search) {
       _this.name = search
       _this.initTableData()
     })
+    transfer.$on('searchByTopic', function (id) {
+      _this.pid = id
+      sessionStorage.setItem('topicId', JSON.stringify(id))
+      _this.initTableData()
+    })
   },
   methods: {
+    // 获取最多星数标签列表
+    getMostStarTagList () {
+      qryMostStarTagList().then(res => {
+        this.tagList = res.data
+      })
+    },
     changeIndex (index) {
       this.activeIndex = index
     },
@@ -109,7 +126,18 @@ export default {
     },
     // 初始化表格数据
     initTableData () {
-      queryQuestionPage({tag: this.tag, name: this.name, currentPage: this.page, pageSize: this.pageSize}).then(res => {
+      this.params = { currentPage: this.page, pageSize: this.pageSize }
+      const type = JSON.parse(sessionStorage.getItem('topicId'))
+      if (type) {
+        this.params['type'] = type
+      }
+      if (this.tag) {
+        this.params['tag'] = this.tag
+      }
+      if (this.name) {
+        this.params['name'] = this.name
+      }
+      queryQuestionPage(this.params).then(res => {
         this.tableData = res.data
         this.total = res.total
       })
@@ -120,15 +148,12 @@ export default {
     },
     // 提问
     askQuestion () {
-      this.$router.push({path: '/question/ask'})
+      this.$router.push({path: '/question/ask', query: {'pid': this.pid}})
     },
     // 答问
     linkAnswer (id) {
       this.$router.push({path: 'question/answer', query: {'id': id}})
     }
-  },
-  created () {
-    this.initTableData()
   }
 }
 </script>

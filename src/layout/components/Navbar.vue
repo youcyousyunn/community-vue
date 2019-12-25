@@ -17,7 +17,7 @@
             v-bind:class="{checked: index === activeIndex}"
             v-on:click="changeIndex(index)">
             <svg-icon v-bind:icon-class=item.icon />
-            <a>{{item.name}}</a>
+            <a @click="searchByTopic(item)">{{item.name}}</a>
           </li>
         </ul>
       </div>
@@ -126,10 +126,10 @@
 import {mapGetters} from 'vuex'
 import Logo from '@/layout/components/Logo'
 import Search from '@/components/HeaderSearch'
-import {qryTopicList} from '@/api/topic.js'
+import {qryTopicList} from '@/api/tag.js'
 import {setToken, getToken, removeToken} from '@/utils/auth'
 import {qryUserInfo, logout} from '@/api/user.js'
-
+import transfer from '@/utils/transfer.js'
 export default {
   components: {
     Logo,
@@ -142,11 +142,12 @@ export default {
   },
   data () {
     return {
+      topicId: '',
       show_logo: true,
       activeIndex: 0,
       show_login: true,
       show_profile: false,
-      topicList: [{name: '热点话题', icon: 'topic'}, {name: '分享', icon: 'share'}, {name: '发现', icon: 'discover'}, {name: '文章', icon: 'article'}],
+      topicList: [],
       loginDialogVisible: false,
       vCodeImg: 'data:image/gif;base64,' + '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',
       loginForm: {
@@ -155,19 +156,32 @@ export default {
         vCode: ''
       },
       userInfo: {
-        accountId: '',
-        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
+        accountId: ''
       }
     }
   },
   methods: {
+    // 根据话题检索问题
+    searchByTopic (data) {
+      if (data.name !== '首页') {
+        this.topicId = data.id
+      } else {
+        this.topicId = ''
+      }
+      transfer.$emit('searchByTopic', this.topicId)
+    },
     changeIndex (index) {
       this.activeIndex = index
     },
     // 获取话题列表
     getTopicList () {
-      qryTopicList().then(res => {
-        this.topicList = res.data
+      const pid = 0 // 话题的父节点
+      qryTopicList(pid).then(res => {
+        const data = res.data
+        for (let i = 0; i < 4; i++) {
+          this.topicList.push(data[i])
+        }
+        this.searchByTopic(data[0])
       })
     },
     // 获取用户信息
