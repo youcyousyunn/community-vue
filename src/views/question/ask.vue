@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-col :span="18">
+      <el-col :span="19">
         <!-- <el-row class="subject">
           <svg-icon icon-class="mulu"/>
           提问
@@ -43,7 +43,7 @@
       </el-col>
 
       <!-- 侧边栏 -->
-      <el-col :span="6">
+      <el-col :span="5">
         <el-row class="side-bar">
           <!-- <a target="_blank">&nbsp;CodePorter社区资源搜索！</a> -->
           <img :src="canvassImg" alt="canvass"/>
