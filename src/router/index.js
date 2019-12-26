@@ -29,7 +29,7 @@ export const constantRoutes = [
         path: '/',
         component: () => import('@/views/home/home'),
         name: 'Home',
-        meta: { title: 'CodePorter', icon: 'home' }
+        meta: { title: '', icon: 'home' }
       }
     ]
   },
