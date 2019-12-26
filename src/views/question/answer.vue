@@ -14,7 +14,7 @@
             <ul class="tags">
               <li v-for="(item, index) in tagList" v-bind:key="index">
                 <a>
-                  {{item}}
+                  <svg-icon v-if="item.icon" :icon-class="item.icon" /> {{item.name}}
                 </a>
               </li>
               <span>{{viewCount}} 次浏览</span>
@@ -307,7 +307,7 @@ export default {
         let data = res.data
         this.title = data.title
         this.viewCount = data.viewCount
-        this.tagList = data.tag.split(',')
+        this.tagList = data.tagList
         this.description = data.description
         this.avatar = data.avatar
         this.userName = data.userName

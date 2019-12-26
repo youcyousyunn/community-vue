@@ -6,7 +6,7 @@
           <li v-for="(item, index) in tagList" v-bind:key="index"
               v-bind:class="{checked: index === activeIndex}"
               v-on:click="changeIndex(index)">
-            <a @click="toQuery(item.name)">{{item.name}}</a>
+            <a @click="toQuery(item)">{{item.name}}</a>
           </li>
         </ul>
       </el-row>
@@ -33,6 +33,9 @@
             <div class="aw-question-content">
               <h4>
                 <a @click="linkAnswer(item.id)">{{item.title}}</a>
+                <a v-for="(tagItem, index) in item.tagList" v-bind:key="index" class="tags" v-bind:class="{tag_checked: 1 === 2}">
+                  <svg-icon v-if="tagItem.icon" :icon-class="tagItem.icon" /> {{tagItem.name}}
+                </a>
               </h4>
               <p>
                 <span>{{item.commentCount}}个评论 &nbsp;·&nbsp;{{item.viewCount}}次浏览
@@ -117,8 +120,8 @@ export default {
       this.activeIndex = index
     },
     toQuery (tag) {
-      if (tag !== '全部') {
-        this.tag = tag
+      if (tag.name !== '全部') {
+        this.tag = tag.id
       } else {
         this.tag = ''
       }
@@ -242,7 +245,7 @@ ul, ol {
         word-wrap: break-word;
         a {
           cursor: pointer;
-          color: #212121;
+          // color: #212121;
           text-decoration: none;
         }
         a:hover {
@@ -293,5 +296,24 @@ ul, ol {
       margin-bottom: 0;
     }
   }
+}
+
+// 标签样式
+.tags {
+  display: inline-block;
+  padding: 0 6px;
+  background: rgba(1,126,102,0.08);
+  color: #017e66;
+  margin-left: 5px;
+  height: 22px;
+  line-height: 22px;
+  font-weight: normal;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+}
+.tag_checked {
+  background: #017E66;
+  color: #fff;
 }
 </style>
