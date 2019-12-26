@@ -122,6 +122,7 @@
     </el-dialog>
   </div>
 </template>
+
 <script>
 import {mapGetters} from 'vuex'
 import Logo from '@/layout/components/Logo'
