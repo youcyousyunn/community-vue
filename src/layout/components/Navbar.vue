@@ -16,7 +16,7 @@
           <li v-for="(item, index) in topicList" v-bind:key="index"
             v-bind:class="{checked: index === activeIndex}"
             v-on:click="changeIndex(index)">
-            <svg-icon v-bind:icon-class=item.icon />
+            <svg-icon v-if="item.icon" v-bind:icon-class=item.icon />
             <a @click="searchByTopic(item)">{{item.name}}</a>
           </li>
         </ul>
@@ -474,5 +474,10 @@ export default {
     cursor: pointer;
     vertical-align: middle
   }
+}
+
+// 更改话题图标原有样式
+/deep/ .svg-icon {
+  padding-top: 2px
 }
 </style>

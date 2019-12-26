@@ -31,7 +31,7 @@
                   v-bind:class="{tag_checked: index === activeTagIndex}"
                   v-on:click="changeTagIndex(index)">
                 <a @click="switchTag(item.name)">
-                  <svg-icon icon-class="discover" /> {{item.name}}
+                  <svg-icon v-if="item.icon" :icon-class="item.icon" /> {{item.name}}
                 </a>
               </li>
             </ul>
