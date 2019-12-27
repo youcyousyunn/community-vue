@@ -14,7 +14,18 @@
             <tinymce v-model="description"></tinymce>
           </el-row>
           <el-row>
-            <el-input v-model="tag" @click.native="getTabTag()" placeholder="标签，如：Vue（用逗号,分隔）"></el-input>
+            <el-input v-model="tag" v-if="inputTag" @click.native="getTabTag()" placeholder="标签，如：Vue（用逗号,分隔）"></el-input>
+            <el-tag
+              v-for="(item, index) in tags"
+              :key="index"
+              size="medium"
+              type="info"
+              effect="plain"
+              closable
+              :disable-transitions="false"
+              @close="closeTag(item)"> {{item.name}}
+            </el-tag>
+            <el-button type="info" plain v-if="newTag" class="button-new-tag" size="small">+ 添加标签</el-button>
           </el-row>
           <el-row v-if="tagShow">
             <ul class="tabs">
@@ -30,7 +41,7 @@
               <li v-for="(item, index) in tagList" v-bind:key="index"
                   v-bind:class="{tag_checked: index === activeTagIndex}"
                   v-on:click="changeTagIndex(index)">
-                <a @click="switchTag(item.name)">
+                <a @click="selectTag(item)">
                   <svg-icon v-if="item.icon" :icon-class="item.icon" /> {{item.name}}
                 </a>
               </li>
@@ -71,7 +82,10 @@ export default {
       type: '',
       title: '',
       description: '',
+      inputTag: true,
+      newTag: false,
       tag: '',
+      tags: [],
       tabId: '', // 默认显示第一个tab标签
       tabList: [],
       activeTabIndex: 0,
@@ -114,19 +128,48 @@ export default {
     changeTagIndex (index) {
       this.activeTagIndex = index
     },
-    // 切换标签
-    switchTag (tag) {
-      if (this.tag && this.tag.length > 0) {
-        if (this.tag.indexOf(tag) === -1) {
-          this.tag = this.tag + ',' + tag
+    // 选取标签
+    selectTag (tag) {
+      if (this.tag) {
+        // 长度判断
+        if (this.tags.length < 5) {
+          // 重复性判断
+          if (this.tag.indexOf(tag.id.toString()) === -1) {
+            this.tag = this.tag + ',' + tag.id.toString()
+            this.tags.push(tag)
+          } else {
+            this.$notify({
+              title: '警告',
+              message: '标签已存在',
+              type: 'warning'
+            })
+          }
+        } else {
+          this.$notify({
+            title: '警告',
+            message: '不能超过5个标签哦',
+            type: 'warning'
+          })
         }
       } else {
-        this.tag = tag
+        this.tag = tag.id.toString()
+        this.tags.push(tag)
       }
+    },
+    // 删除标签
+    closeTag (tag) {
+      let tagArray = this.tag.split(',')
+      tagArray.splice(tagArray.indexOf(tag.id.toString()), 1)
+      console.log(tagArray)
+      this.tag = tagArray.join(',')
+      console.log(this.tag)
+      this.tags.splice(this.tags.indexOf(tag), 1)
     },
     // 获取tab标签
     getTabTag () {
       this.getTagList()
+      this.inputTag = false
+      this.newTag = true
       this.tagShow = true
     },
     // 发布问题
@@ -191,6 +234,18 @@ export default {
       margin-bottom: 0;
     }
   }
+}
+
+// 添加&删除标签
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  // margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .tabs {
