@@ -80,7 +80,7 @@ export default {
   data () {
     return {
       Avatar: Avatar,
-      tagList: ['全部', 'Vue', 'Node.js', 'html5', '最新动态', '活动'],
+      tagList: [],
       activeIndex: 0,
       pid: '',
       tag: '',

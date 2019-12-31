@@ -13,10 +13,9 @@
           <el-row>
             <ul class="tags">
               <li v-for="(item, index) in tagList" v-bind:key="index">
-                <a>
-                  <svg-icon v-if="item.icon" :icon-class="item.icon" /> {{item.name}}
-                </a>
+                <a><svg-icon v-if="item.icon" :icon-class="item.icon" /> {{item.name}} </a>
               </li>
+              <a style="color: #00965e" @click="edit">&nbsp;编辑&nbsp;</a>
               <span>{{viewCount}} 次浏览</span>
             </ul>
           </el-row>
@@ -164,11 +163,13 @@ export default {
   data () {
     return {
       id: 0, // 问题id
+      pid: '',
       answerId: 0,
       title: '',
       tagList: [],
       viewCount: 0,
       description: '',
+      tag: '',
       avatar: '',
       userName: '',
       creTm: 0,
@@ -197,6 +198,18 @@ export default {
     }
   },
   methods: {
+    // 编辑问题
+    edit () {
+      let questionInfo = {
+        id: this.id,
+        title: this.title,
+        description: this.description,
+        tag: this.tag,
+        tags: this.tagList
+      }
+      sessionStorage.setItem('question', JSON.stringify(questionInfo))
+      this.$router.push({path: '/question/ask', query: {'pid': this.pid}})
+    },
     // 查看问题评论
     viewQuestionComment (replyType) {
       if (!this.questionCommentShow) {
@@ -298,17 +311,19 @@ export default {
             type: 'success'
           })
         }
-        // this.$router.push({path: '/'}) // 返回首页
       })
     },
     // 根据id获取单个提问
     getQuestion () {
       qryQuestion(this.id).then(res => {
-        let data = res.data
+        const data = res.data
+        this.id = data.id
         this.title = data.title
         this.viewCount = data.viewCount
         this.tagList = data.tagList
         this.description = data.description
+        this.pid = data.type
+        this.tag = data.tag
         this.avatar = data.avatar
         this.userName = data.userName
         this.creTm = data.creTm

@@ -8,10 +8,18 @@ export function queryQuestionPage (params) {
   })
 }
 
-export function pubQuestion (data) {
+export function add (data) {
   return request({
     url: '/question',
     method: 'post',
+    data
+  })
+}
+
+export function edit (data) {
+  return request({
+    url: '/question',
+    method: 'put',
     data
   })
 }

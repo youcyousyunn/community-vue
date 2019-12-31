@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Notification } from 'element-ui'
 import { getToken } from '@/utils/auth'
 
 const service = axios.create({
@@ -23,26 +23,59 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   response => {
-    const res = response.data
-    if (res.rspCode !== '0000') {
-      Message({
-        message: res.rspInf || '错误',
-        type: 'error',
-        duration: 3 * 1000
+    debugger
+    const code = response.status
+    if (code < 200 || code > 300) {
+      Notification.error({
+        title: response.message
       })
-
-      return Promise.reject(new Error(res.rspInf || '错误'))
     } else {
-      return res
+      return response.data
     }
   },
   error => {
-    console.log('err' + error)
-    Message({
-      message: error.message || '服务器出故障了...',
-      type: 'error',
-      duration: 3 * 1000
-    })
+    let code = 0
+    try {
+      code = error.response.data.status
+    } catch (e) {
+      if (error.toString().indexOf('Error: timeout') !== -1) {
+        Notification.error({
+          title: '网络请求超时',
+          duration: 2500
+        })
+        return Promise.reject(error)
+      }
+      if (error.toString().indexOf('Error: Network Error') !== -1) {
+        Notification.error({
+          title: '网络请求错误',
+          duration: 2500
+        })
+        return Promise.reject(error)
+      }
+    }
+    debugger
+    if (code === 400) {
+      const errorMsg = error.response.data.msg
+      if (errorMsg) {
+        Notification.error({
+          title: errorMsg,
+          duration: 2500
+        })
+      } else {
+        Notification.error({
+          title: '服务器忙不过来了',
+          duration: 2500
+        })
+      }
+    } else {
+      const errorMsg = error.response.data.message
+      if (errorMsg) {
+        Notification.error({
+          title: errorMsg,
+          duration: 2500
+        })
+      }
+    }
     return Promise.reject(error)
   }
 )

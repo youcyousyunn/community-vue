@@ -72,13 +72,14 @@
 <script>
 import Tinymce from '@/components/Tinymce'
 import {qryTopicList, qryTagList} from '@/api/tag.js'
-import {pubQuestion} from '@/api/question.js'
+import {add, edit} from '@/api/question.js'
 export default {
   components: {
     Tinymce
   },
   data () {
     return {
+      id: '',
       type: '',
       title: '',
       description: '',
@@ -97,7 +98,19 @@ export default {
   },
   created () {
     this.type = this.$route.query.pid
+    const questionInfo = JSON.parse(sessionStorage.getItem('question'))
+    if (questionInfo) {
+      this.id = questionInfo.id
+      this.title = questionInfo.title
+      this.description = questionInfo.description
+      this.tags = questionInfo.tags
+      this.tag = questionInfo.tag
+    }
     this.getTopicList()
+  },
+  destroyed () {
+    // 销毁问题信息
+    sessionStorage.removeItem('question')
   },
   methods: {
     // 获取话题列表
@@ -109,6 +122,12 @@ export default {
         for (let i = 1; i < data.length; i++) {
           this.tabList.push(data[i])
         }
+        if (this.id) {
+          this.inputTag = false
+          this.newTag = true
+          this.tagShow = true
+        }
+        this.getTagList()
       })
     },
     changeTabIndex (index) {
@@ -174,7 +193,20 @@ export default {
     },
     // 发布问题
     publish () {
-      pubQuestion({title: this.title, description: this.description, type: this.type, tag: this.tag, creator: 53936355}).then(res => {
+      let data = {
+        id: this.id,
+        title: this.title,
+        description: this.description,
+        type: this.type,
+        tag: this.tag,
+        creator: 53936355
+      }
+      if (this.id) {
+        this.edit(data)
+      } else this.add(data)
+    },
+    add (data) {
+      add(data).then(res => {
         this.$notify({
           title: '成功',
           message: '提问成功',
@@ -183,8 +215,15 @@ export default {
         this.$router.push({path: '/'})
       })
     },
-    // 初始化列表
-    initTableListData () {
+    edit (data) {
+      edit(data).then(res => {
+        this.$notify({
+          title: '成功',
+          message: '修改成功',
+          type: 'success'
+        })
+        this.$router.push({path: '/'})
+      })
     }
   }
 }
