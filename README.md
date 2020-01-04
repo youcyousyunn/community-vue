@@ -25,4 +25,6 @@ Community顾名思义是一个社区交流的项目，目前该项目实现了�
 
 首页
 ![Alt text](https://github.com/youcyousyunn/vue-community/tree/master/src/images/home.jpg)
+![首页图](https://github.com/youcyousyunn/vue-community/tree/master/src/images/ask.png)
+
 
