@@ -193,7 +193,7 @@ export default {
       answerComment: '',
       textareaShow: true,
       tinymceShow: false,
-      canvassImg: require('@/images/canvass.png'),
+      canvassImg: require('@/images/canvass.jpg'),
       answer: ''
     }
   },
