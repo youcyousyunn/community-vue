@@ -23,7 +23,6 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   response => {
-    debugger
     const code = response.status
     if (code < 200 || code > 300) {
       Notification.error({
@@ -53,7 +52,6 @@ service.interceptors.response.use(
         return Promise.reject(error)
       }
     }
-    debugger
     if (code === 400) {
       const errorMsg = error.response.data.msg
       if (errorMsg) {
