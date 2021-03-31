@@ -26,8 +26,11 @@
       </template>
 
       <div class="avatar-container right-menu-item hover-effect" v-if="show_login">
-        <div class="avatar-wrapper" style="margin-top:unset">
+        <div class="avatar-wrapper">
           <a class="login" @click="openLoginDialog">立即登录</a>
+        </div>
+        <div class="avatar-wrapper">
+          <a class="register">免费注册</a>
         </div>
       </div>
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click" v-if="show_profile">
@@ -246,10 +249,12 @@ export default {
 </script>
 <style scoped lang="scss">
 .navbar {
+  display: flex;
+  justify-content: center;
   border-top: 3px solid #009a61;
-  height: 67px;
-  box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1), 0 1px rgba(0,0,0,0.1);
-  background: #fafafa;
+  height: 60px;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+  background: #ffffff;
   overflow: hidden;
   position: relative;
   .hamburger-container {
@@ -264,18 +269,49 @@ export default {
       background: rgba(0, 0, 0, .025)
     }
   }
+  .left-menu {
+    height: 100%;
+    &:focus {
+      outline: none;
+    }
+
+    .left-menu-item {
+      height: 100%;
+      font-size: 18px;
+      color: #5a5e66;
+      ul {
+        list-style: none;
+        float: left;
+        margin: 0;
+        li {
+          float: left;
+          color: #757575;
+          font-size: 14px;
+          cursor: pointer;
+          .navbar-icon {
+            font-size: 18px;
+          }
+        }
+      }
+      &.hover-effect {
+        cursor: pointer;
+        transition: background .3s;
+        &:hover {
+          background: rgba(0, 0, 0, .025)
+        }
+      }
+    }
+  }
 
   .right-menu {
-    float: right;
     height: 100%;
-    line-height: 50px;
     &:focus {
       outline: none;
     }
 
     .right-menu-item {
       display: inline-block;
-      padding: 8px 8px;
+      padding-top: calc(30px - 10.5px);
       height: 100%;
       color: #5a5e66;
       vertical-align: text-bottom;
@@ -287,7 +323,8 @@ export default {
           float: left;
           color: #757575;
           font-size: 16px;
-          padding: 0 16px;
+          padding: 0 10px;
+          font-weight: 700!important;
           cursor: pointer;
           .navbar-icon {
             font-size: 18px;
@@ -308,7 +345,7 @@ export default {
 
     .search {
       display: inline-block;
-      padding: 8px 8px;
+      padding-top: calc(30px - 19px);
       width: 265px;
       height: 100%;
       font-size: 18px;
@@ -324,18 +361,26 @@ export default {
     }
 
     .avatar-container {
-      margin-right: 30px;
+      margin-left: 20px;
       .avatar-wrapper {
-        margin-top: 5px;
+        display: inline-block;
         position: relative;
         .login {
-          color: #009a61;
+          color: #00965e;
           font-size: 16px;
           text-decoration: none;
-          padding: 8px 8px;
           cursor: pointer;
           width: 40px;
           border-radius: 4px;
+        }
+        .register {
+          margin-left: 15px;
+          padding: .375rem .75rem;
+          color: #fff;
+          background-color: #00965e;
+          border-color: #00965e;
+          border-radius: .25rem;
+          border: 1px solid transparent;
         }
 
         .user-avatar {
@@ -353,45 +398,6 @@ export default {
           top: 25px;
           font-size: 12px;
           color: #fff;
-        }
-      }
-    }
-  }
-
-  .left-menu {
-    float: left;
-    height: 100%;
-    line-height: 50px;
-    &:focus {
-      outline: none;
-    }
-
-    .left-menu-item {
-      display: inline-block;
-      padding: 8px 8px;
-      height: 100%;
-      font-size: 18px;
-      color: #5a5e66;
-      vertical-align: text-bottom;
-      ul {
-        list-style: none;
-        float: left;
-        margin: 0;
-        li {
-          float: left;
-          color: #757575;
-          font-size: 14px;
-          cursor: pointer;
-          .navbar-icon {
-            font-size: 18px;
-          }
-        }
-      }
-      &.hover-effect {
-        cursor: pointer;
-        transition: background .3s;
-        &:hover {
-          background: rgba(0, 0, 0, .025)
         }
       }
     }

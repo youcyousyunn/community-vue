@@ -204,7 +204,6 @@ ul, ol {
     color: #fff;
     background-color: #009a61;
     border-color: #008151;
-    // display: inline-block;
     margin-bottom: 0;
     font-weight: normal;
     text-align: center;
@@ -213,7 +212,6 @@ ul, ol {
     background-image: none;
     border: 1px solid transparent;
     white-space: nowrap;
-    padding: 8px 8px;
     font-size: 14px;
     line-height: 1.42858;
     border-radius: 4px;
