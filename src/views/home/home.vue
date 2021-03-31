@@ -90,7 +90,7 @@ export default {
       pageSize: 10,
       page: 1,
       total: 0,
-      canvassImg: require('@/images/canvass.jpg')
+      canvassImg: require('@/images/canvass.png')
     }
   },
   created () {
