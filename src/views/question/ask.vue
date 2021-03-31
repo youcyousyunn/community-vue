@@ -93,7 +93,7 @@ export default {
       tagList: [],
       activeTagIndex: -1,
       tagShow: false,
-      canvassImg: require('@/images/canvass.png')
+      canvassImg: require('@/images/canvass.jpg')
     }
   },
   created () {
