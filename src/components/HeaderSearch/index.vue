@@ -37,10 +37,10 @@ export default {
     padding: .375rem .75rem;
     line-height: 1.42858;
     background-color: #fff;
-    border-radius: 4px;
+    border-radius: 0.25rem;
   }
   /deep/ .el-input__inner:focus {
-    border:1px solid #a9e2cd;
+    border: 1px solid #a9e2cd;
   }
   .el-icon-search {
     padding-right: 8px;

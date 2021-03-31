@@ -201,6 +201,7 @@ ul, ol {
     text-align: right;
   }
   .askQuestion a {
+    padding: 0.575rem .55rem;
     color: #fff;
     background-color: #009a61;
     border-color: #008151;
